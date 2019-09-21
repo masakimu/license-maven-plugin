@@ -42,25 +42,25 @@ public class CopyrightRangeProviderTest {
     public void copyrightRange() {
         CopyrightRangeProvider provider = new CopyrightRangeProvider();
 
-        assertRange(provider, "dir1/file1.txt", "2000", "2006", "1999-2006");
-        assertRange(provider, "dir2/file2.txt", "2007", "2007", "1999-2007");
-        assertRange(provider, "dir1/file3.txt", "2009", "2009", "1999-2009");
-        assertRange(provider, "dir2/file4.txt", "1999", "1999", "1999");
+        assertRange(provider, "dir1/file1.txt", "2000", "2006", "1999-2006", "Peter Palaga <ppalaga@redhat.com>");
+        assertRange(provider, "dir2/file2.txt", "2007", "2007", "1999-2007", "Peter Palaga <ppalaga@redhat.com>");
+        assertRange(provider, "dir1/file3.txt", "2009", "2009", "1999-2009", "Peter Palaga <ppalaga@redhat.com>");
+        assertRange(provider, "dir2/file4.txt", "1999", "1999", "1999", "Peter Palaga <ppalaga@redhat.com>");
 
         /* The last change of file4.txt in git history is in 1999
          * but the inception year is 2000
          * and we do not want the range to go back (2000-1999)
          * so in this case we expect just 2000 */
-        assertRange(provider, "dir2/file4.txt", "2000", "1999", "1999", "2000");
+        assertRange(provider, "dir2/file4.txt", "2000", "1999", "1999", "2000", "Peter Palaga <ppalaga@redhat.com>");
 
     }
 
-    private void assertRange(CopyrightRangeProvider provider, String path, String copyrightStart, String copyrightEnd, String copyrightRange) {
-        assertRange(provider, path, "1999", copyrightStart, copyrightEnd, copyrightRange);
+    private void assertRange(CopyrightRangeProvider provider, String path, String copyrightStart, String copyrightEnd, String copyrightRange, String copyrightAuthorName) {
+        assertRange(provider, path, "1999", copyrightStart, copyrightEnd, copyrightRange, copyrightAuthorName);
     }
 
     private void assertRange(CopyrightRangeProvider provider, String path, String inceptionYear,
-            String copyrightStart, String copyrightEnd, String copyrightRange) {
+            String copyrightStart, String copyrightEnd, String copyrightRange, String copyrightAuthorName) {
         Properties props = new Properties();
         props.put(CopyrightRangeProvider.INCEPTION_YEAR_KEY, inceptionYear);
 
@@ -71,6 +71,7 @@ public class CopyrightRangeProviderTest {
         expected.put(CopyrightRangeProvider.COPYRIGHT_CREATION_YEAR_KEY, copyrightStart);
         expected.put(CopyrightRangeProvider.COPYRIGHT_LAST_YEAR_KEY, copyrightEnd);
         expected.put(CopyrightRangeProvider.COPYRIGHT_YEARS_KEY, copyrightRange);
+        expected.put(CopyrightRangeProvider.COPYRIGHT_CREATE_AUTHOR_KEY, copyrightAuthorName);
         Assert.assertEquals("for file '" + path + "': ", expected, actual);
 
     }

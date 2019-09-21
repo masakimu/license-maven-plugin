@@ -159,6 +159,20 @@ public class GitLookup {
         walk.dispose();
         return commitYear;
     }
+    
+    
+    String getAuthorOfCreation(File file) throws IOException, GitAPIException {
+        String repoRelativePath = pathResolver.relativize(file);
+        String authorName = "";
+        RevWalk walk = getGitRevWalk(repoRelativePath, true);
+        Iterator<RevCommit> iterator = walk.iterator();
+        if (iterator.hasNext()) {
+            RevCommit commit = iterator.next();
+            authorName = getAuthorNameFromCommit(commit);
+        }
+        walk.dispose();
+        return authorName;
+    }
 
     private boolean isFileModifiedOrUnstaged(String repoRelativePath) throws GitAPIException {
         Status status = new Git(repository).status().addPath(repoRelativePath).call();
@@ -205,5 +219,10 @@ public class GitLookup {
         Calendar result = Calendar.getInstance(timeZone);
         result.setTimeInMillis(epochMilliseconds);
         return result.get(Calendar.YEAR);
+    }
+    
+    private String getAuthorNameFromCommit(RevCommit commit){
+        PersonIdent id = commit.getAuthorIdent();
+        return id.getName()+ " <" + id.getEmailAddress() + ">";
     }
 }
