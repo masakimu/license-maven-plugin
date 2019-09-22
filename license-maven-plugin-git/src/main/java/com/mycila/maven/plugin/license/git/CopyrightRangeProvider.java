@@ -28,6 +28,7 @@ import com.mycila.maven.plugin.license.AbstractLicenseMojo;
 import com.mycila.maven.plugin.license.PropertiesProvider;
 import com.mycila.maven.plugin.license.document.Document;
 import com.mycila.maven.plugin.license.git.GitLookup.DateSource;
+import java.util.Calendar;
 
 /**
  * An implementation of {@link PropertiesProvider} that adds {@value #COPYRIGHT_LAST_YEAR_KEY} and
@@ -45,8 +46,9 @@ public class CopyrightRangeProvider implements PropertiesProvider {
     public static final String COPYRIGHT_LAST_YEAR_TIME_ZONE_KEY = "license.git.copyrightLastYearTimeZone";
     public static final String COPYRIGHT_YEARS_KEY = "license.git.copyrightYears";
     public static final String INCEPTION_YEAR_KEY = "project.inceptionYear";
-    public static final String COPYRIGHT_CREATE_AUTHOR_NAME_KEY="license.git.CreateAuthorName";
-    public static final String COPYRIGHT_CREATE_AUTHOR_EMAIL_KEY="license.git.CreateAuthorEmail";
+    public static final String COPYRIGHT_CREATION_AUTHOR_NAME_KEY= "license.git.CreationAuthorName";
+    public static final String COPYRIGHT_CREATION_AUTHOR_EMAIL_KEY="license.git.CreationAuthorEmail";
+    public static final String COPYRIGHT_CREATION_DATE_KEY="license.git.copyrightCreationDate";
     
     private volatile GitLookup gitLookup;
 
@@ -98,10 +100,11 @@ public class CopyrightRangeProvider implements PropertiesProvider {
             }
             result.put(COPYRIGHT_YEARS_KEY, copyrightYears);
 
-            int copyrightStart = gitLookup.getYearOfCreation(document.getFile());
+            int copyrightStart = gitLookup.getYearOfCreation(document.getFile());                      
             result.put(COPYRIGHT_CREATION_YEAR_KEY, Integer.toString(copyrightStart));
-            result.put(COPYRIGHT_CREATE_AUTHOR_NAME_KEY, gitLookup.getAuthorNameOfCreation(document.getFile()) );
-            result.put(COPYRIGHT_CREATE_AUTHOR_EMAIL_KEY, gitLookup.getAuthorEmailOfCreation(document.getFile()) );
+            result.put(COPYRIGHT_CREATION_AUTHOR_NAME_KEY, gitLookup.getAuthorNameOfCreation(document.getFile()) );
+            result.put(COPYRIGHT_CREATION_AUTHOR_EMAIL_KEY, gitLookup.getAuthorEmailOfCreation(document.getFile()) );
+            result.put(COPYRIGHT_CREATION_DATE_KEY, gitLookup.getDateOfCreation(document.getFile()).toString() );
             return Collections.unmodifiableMap(result);
         } catch (Exception e) {
             throw new RuntimeException("Could not compute the year of the last git commit for file "
