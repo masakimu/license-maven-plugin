@@ -47,6 +47,7 @@ public class CopyrightRangeProvider implements PropertiesProvider {
     public static final String INCEPTION_YEAR_KEY = "project.inceptionYear";
     public static final String COPYRIGHT_CREATE_AUTHOR_NAME_KEY="license.git.CreateAuthorName";
     public static final String COPYRIGHT_CREATE_AUTHOR_EMAIL_KEY="license.git.CreateAuthorEmail";
+    
     private volatile GitLookup gitLookup;
 
     public CopyrightRangeProvider() {
@@ -85,7 +86,7 @@ public class CopyrightRangeProvider implements PropertiesProvider {
                     + document.getFile().getAbsolutePath());
         }
         try {
-            Map<String, String> result = new HashMap<String, String>(4);
+            Map<String, String> result = new HashMap<String, String>(8);
             GitLookup gitLookup = getGitLookup(document.getFile(), properties);
             int copyrightEnd = gitLookup.getYearOfLastChange(document.getFile());
             result.put(COPYRIGHT_LAST_YEAR_KEY, Integer.toString(copyrightEnd));
