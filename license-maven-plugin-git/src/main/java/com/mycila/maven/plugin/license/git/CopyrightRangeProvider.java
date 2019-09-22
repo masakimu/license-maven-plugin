@@ -45,8 +45,8 @@ public class CopyrightRangeProvider implements PropertiesProvider {
     public static final String COPYRIGHT_LAST_YEAR_TIME_ZONE_KEY = "license.git.copyrightLastYearTimeZone";
     public static final String COPYRIGHT_YEARS_KEY = "license.git.copyrightYears";
     public static final String INCEPTION_YEAR_KEY = "project.inceptionYear";
-    public static final String COPYRIGHT_CREATE_AUTHOR_KEY="license.git.CreateAuthor";
-
+    public static final String COPYRIGHT_CREATE_AUTHOR_NAME_KEY="license.git.CreateAuthorName";
+    public static final String COPYRIGHT_CREATE_AUTHOR_EMAIL_KEY="license.git.CreateAuthorEmail";
     private volatile GitLookup gitLookup;
 
     public CopyrightRangeProvider() {
@@ -99,7 +99,8 @@ public class CopyrightRangeProvider implements PropertiesProvider {
 
             int copyrightStart = gitLookup.getYearOfCreation(document.getFile());
             result.put(COPYRIGHT_CREATION_YEAR_KEY, Integer.toString(copyrightStart));
-            result.put(COPYRIGHT_CREATE_AUTHOR_KEY, gitLookup.getAuthorOfCreation(document.getFile()) );
+            result.put(COPYRIGHT_CREATE_AUTHOR_NAME_KEY, gitLookup.getAuthorNameOfCreation(document.getFile()) );
+            result.put(COPYRIGHT_CREATE_AUTHOR_EMAIL_KEY, gitLookup.getAuthorEmailOfCreation(document.getFile()) );
             return Collections.unmodifiableMap(result);
         } catch (Exception e) {
             throw new RuntimeException("Could not compute the year of the last git commit for file "

@@ -161,7 +161,7 @@ public class GitLookup {
     }
     
     
-    String getAuthorOfCreation(File file) throws IOException, GitAPIException {
+    String getAuthorNameOfCreation(File file) throws IOException, GitAPIException {
         String repoRelativePath = pathResolver.relativize(file);
         String authorName = "";
         RevWalk walk = getGitRevWalk(repoRelativePath, true);
@@ -172,6 +172,19 @@ public class GitLookup {
         }
         walk.dispose();
         return authorName;
+    }
+    
+    String getAuthorEmailOfCreation(File file) throws IOException, GitAPIException {
+        String repoRelativePath = pathResolver.relativize(file);
+        String authorEmail = "";
+        RevWalk walk = getGitRevWalk(repoRelativePath, true);
+        Iterator<RevCommit> iterator = walk.iterator();
+        if (iterator.hasNext()) {
+            RevCommit commit = iterator.next();
+            authorEmail = getAuthorEmailFromCommit(commit);
+        }
+        walk.dispose();
+        return authorEmail;
     }
 
     private boolean isFileModifiedOrUnstaged(String repoRelativePath) throws GitAPIException {
@@ -223,6 +236,11 @@ public class GitLookup {
     
     private String getAuthorNameFromCommit(RevCommit commit){
         PersonIdent id = commit.getAuthorIdent();
-        return id.getName()+ " <" + id.getEmailAddress() + ">";
+        return id.getName();
+    }
+    
+    private String getAuthorEmailFromCommit(RevCommit commit){
+        PersonIdent id = commit.getAuthorIdent();
+        return id.getEmailAddress();
     }
 }
