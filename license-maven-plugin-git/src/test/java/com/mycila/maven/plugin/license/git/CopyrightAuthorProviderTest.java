@@ -43,11 +43,6 @@ public class CopyrightAuthorProviderTest {
         CopyrightAuthorProvider provider = new CopyrightAuthorProvider();
 
         assertAuthor(provider, "dir1/file1.txt", "Peter Palaga", "ppalaga@redhat.com");
-        assertAuthor(provider, "dir2/file2.txt", "Peter Palaga", "ppalaga@redhat.com");
-        assertAuthor(provider, "dir1/file3.txt", "Peter Palaga", "ppalaga@redhat.com");
-        assertAuthor(provider, "dir2/file4.txt", "Peter Palaga", "ppalaga@redhat.com");
-
-
     }
 
     private void assertAuthor(CopyrightAuthorProvider provider, String path, String copyrightAuthorName, String copyrightAuthorEmail) {
